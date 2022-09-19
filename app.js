@@ -1,3 +1,2 @@
-var app = require('./config/server')
-
-app()
+import server from './config/server.js'
+import routes from './app/routes/routes.js'

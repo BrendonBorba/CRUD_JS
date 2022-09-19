@@ -1,14 +1,16 @@
-module.exports = () => {
-  var express = require('express')
-  var app = express()
-  app.set('view engine', 'ejs')
-  app.set('views', './app/views')
+import express from 'express'
+import routes from '../app/routes/routes.js'
 
-  require('../app/routes/web')(app)
+const app = express()
 
-  var port = 3000
+app.set('view engine', 'ejs')
+app.set('views', './app/views')
 
-  app.listen(port, () => {
-    console.log('localhost:3000')
-  })
-}
+app.use(routes)
+
+const port = 3000
+app.listen(port, () => {
+  console.log('localhost:3000')
+})
+
+export default 'server.js'
