@@ -80,6 +80,7 @@ export const categorySearch = async (req, res) => {
   try {
     const search = await db('products').whereLike('category', `%${category}%`)
     res.status(200).json(search)
+    console.log('chegou aqui')
   } catch (error) {
     res.status(400).json({ id: 0, msg: 'Error: ' + error.message })
   }
