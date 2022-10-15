@@ -3,7 +3,9 @@ import db from '../../config/db_config.js'
 export const clientsIndex = async (req, res) => {
   try {
     const clients = await db.select('*').from('clients')
-    res.status(200).json(clients)
+    res.render('clients/index', {
+      clients: clients
+    })
   } catch (error) {
     res.status(400).json({ id: 0, msg: 'Error: ' + error.messsage })
   }

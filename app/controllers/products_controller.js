@@ -3,7 +3,9 @@ import db from '../../config/db_config.js'
 export const productsIndex = async (req, res) => {
   try {
     const products = await db.select('*').from('products')
-    res.status(200).json(products)
+    res.render('products/index', {
+      products: products
+    })
   } catch (error) {
     res.status(400).json({ id: 0, msg: 'Error: ' + error.messsage })
   }
