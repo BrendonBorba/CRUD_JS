@@ -1,8 +1,2 @@
-/******/ (() => { // webpackBootstrap
-var __webpack_exports__ = {};
-/*!*******************************************!*\
-  !*** ./app/src/javascript/application.js ***!
-  \*******************************************/
-
-/******/ })()
-;
+console.log("auqi");
+//# sourceMappingURL=bundle.js.map

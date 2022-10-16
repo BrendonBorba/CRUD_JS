@@ -1,7 +1,7 @@
 const path = require('path')
 
 module.exports = {
-  mode: 'development',
+  mode: 'production',
   entry: './app/src/javascript/application.js',
   output: {
     path: path.resolve(__dirname, 'public', 'assets', 'javascript'),
