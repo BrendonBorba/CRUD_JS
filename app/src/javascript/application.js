@@ -1,3 +1,4 @@
-// 1
-// 2
-console.log('auqi')
+import 'core-js/stable'
+import 'regenerator-runtime/runtime'
+
+import '../stylesheets/application.css'
