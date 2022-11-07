@@ -11,6 +11,7 @@
     "react-scripts": "5.0.1",
     "web-vitals": "^2.1.4"
   },
+  "type": "module",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
@@ -34,5 +35,14 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "babel-eslint": "^10.1.0",
+    "eslint": "^8.27.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-jsx-a11y": "^6.6.1",
+    "eslint-plugin-react": "^7.31.10",
+    "eslint-plugin-react-hooks": "^4.6.0"
   }
 }
