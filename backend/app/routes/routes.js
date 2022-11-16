@@ -1,12 +1,12 @@
 import { Router, json } from 'express'
 import {
-  clientsIndex,
-  clientInsert,
-  clientUpdate,
-  clientDestroy,
-  clientSearch,
+  clientesIndex,
+  clienteInsert,
+  clienteUpdate,
+  clienteDestroy,
+  clienteSearch,
   accountSearch
-} from '../controllers/clients_controller.js'
+} from '../controllers/clientes_controller.js'
 import {
   productsIndex,
   productInsert,
@@ -18,15 +18,15 @@ import {
 
 const router = Router()
 
-router.use(json())
+// router.use(json())
 
 router
-  .get('/clients', clientsIndex)
-  .post('/client', clientInsert)
-  .put('/client/:id', clientUpdate)
-  .delete('/client/:id', clientDestroy)
-  .get('/clients/search/:fullname', clientSearch)
-  .get('/clients/search/:from/:to', accountSearch)
+  .get('/clientes', clientesIndex)
+  .post('/cliente', clienteInsert)
+  .put('/cliente/:id', clienteUpdate)
+  .delete('/cliente/:id', clienteDestroy)
+  .get('/clientes/search/:fullname', clienteSearch)
+  .get('/clientes/search/:from/:to', accountSearch)
 
   .get('/products', productsIndex)
   .post('/product', productInsert)
