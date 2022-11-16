@@ -1,16 +1,16 @@
-const path = require('path')
+import path from 'path'
 
-module.exports = {
+export default {
   mode: 'production',
   entry: './app/src/javascript/application.js',
   output: {
-    path: path.resolve(__dirname, 'public', 'assets', 'javascript'),
+    path: path.resolve('public', 'assets', 'javascript'),
     filename: 'bundle.js'
   },
   module: {
     rules: [
       {
-        exclude: /node-module/,
+        exclude: /node-modules/,
         test: /\.js$/,
         use: {
           loader: 'babel-loader',
