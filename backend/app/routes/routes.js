@@ -9,13 +9,13 @@ import {
   emailSearch
 } from '../controllers/clientes_controller.js'
 import {
-  productsIndex,
-  productInsert,
-  productUpdate,
-  productDestroy,
-  productSearch,
+  pizzasIndex,
+  pizzaInsert,
+  pizzaUpdate,
+  pizzaDestroy,
+  pizzaSearch,
   categorySearch
-} from '../controllers/products_controller.js'
+} from '../controllers/pizzas_controller.js'
 import {
   userIndex,
   userInsert,
@@ -36,12 +36,12 @@ router
   .get('/clientes/search/:nome', clienteSearch)
   .get('/clientes/search/:from/:to', emailSearch)
 
-  .get('/products', productsIndex)
-  .post('/product', productInsert)
-  .put('/product/:id', productUpdate)
-  .delete('/product/:id', productDestroy)
-  .get('/products/search/:name', productSearch)
-  .get('/products/search/:category', categorySearch)
+  .get('/pizzas', pizzasIndex)
+  .post('/pizza', upload.single('avatar'), pizzaInsert)
+  .put('/pizza/:id', pizzaUpdate)
+  .delete('/pizza/:id', pizzaDestroy)
+  .get('/pizzas/search/:name', pizzaSearch)
+  .get('/pizzas/search/:category', categorySearch)
 
   .get('/usuarios', userIndex)
   .post('/usuario', userInsert)

@@ -33,7 +33,6 @@ export const clienteInsert = async (req, res) => {
 export const clienteUpdate = async (req, res) => {
   const { id } = req.params
 
-  // atribui via desestruturação
   const { nome, cpf, email } = req.body
 
   if (!nome || !cpf || !email) {
