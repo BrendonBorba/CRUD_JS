@@ -10,18 +10,18 @@ export const clientesIndex = async (req, res) => {
 }
 
 export const clienteInsert = async (req, res) => {
-  const { fullname, email, account } = req.body
+  const { nome, cpf, email } = req.body
 
-  if (!fullname || !email || !account) {
+  if (!nome || !cpf || !email) {
     res.status(400).json({
       id: 0,
-      msg: "Error... params not found, please inform 'fullname', 'email' and 'account'."
+      msg: "Error... params not found, please inform 'nome', 'cpf' and 'email'."
     })
     return
   }
 
   try {
-    const cliente = await db('clientes').insert({ fullname, email, account })
+    const cliente = await db('clientes').insert({ nome, cpf, email })
     res
       .status(201)
       .json({ id: cliente[0], msg: 'Ok, cliente successfully inserted!' })
@@ -34,18 +34,18 @@ export const clienteUpdate = async (req, res) => {
   const { id } = req.params
 
   // atribui via desestruturação
-  const { fullname, email, account } = req.body
+  const { nome, cpf, email } = req.body
 
-  if (!fullname || !email || !account) {
+  if (!nome || !cpf || !email) {
     res.status(400).json({
       id: 0,
-      msg: "Error... params not found, please inform 'fullname', 'email' and 'account'"
+      msg: "Error... params not found, please inform 'nome', 'cpf' and 'email'"
     })
     return
   }
 
   try {
-    await db('clientes').where({ id }).update({ fullname, email, account })
+    await db('clientes').where({ id }).update({ nome, cpf, email })
     res.status(200).json({ id, msg: 'Ok, cliente successfully changed' })
   } catch (error) {
     res.status(400).json({ id: 0, msg: 'Error: ' + error.message })
@@ -64,23 +64,23 @@ export const clienteDestroy = async (req, res) => {
 }
 
 export const clienteSearch = async (req, res) => {
-  const { fullname } = req.params
+  const { nome } = req.params
 
   try {
-    const search = await db('clientes').whereLike('fullname', `%${fullname}%`)
+    const search = await db('clientes').whereLike('nome', `%${nome}%`)
     res.status(200).json(search)
   } catch (error) {
     res.status(400).json({ id: 0, msg: 'Error: ' + error.message })
   }
 }
 
-export const accountSearch = async (req, res) => {
+export const emailSearch = async (req, res) => {
   const { from, to } = req.params
 
   try {
     const search = await db('clientes')
-      .whereBetween('account', [from, to])
-      .orderBy('account')
+      .whereBetween('email', [from, to])
+      .orderBy('email')
     res.status(200).json(search)
   } catch (error) {
     res.status(400).json({ id: 0, msg: 'Error: ' + error.message })
@@ -93,5 +93,5 @@ export default {
   clienteUpdate,
   clienteDestroy,
   clienteSearch,
-  accountSearch
+  emailSearch
 }

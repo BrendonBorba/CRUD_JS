@@ -11,6 +11,9 @@ const development = {
     user: 'root',
     password: '',
     database: 'bank'
+  },
+  migrations: {
+    tableName: 'clientes'
   }
 }
 

@@ -19,14 +19,14 @@
 -- Table structure for table `clients`
 --
 
-DROP TABLE IF EXISTS `clients`;
+DROP TABLE IF EXISTS `clientes`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `clients` (
+CREATE TABLE `clientes` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `fullname` varchar(100) NOT NULL,
-  `email` varchar(100) NOT NULL,
-  `account` int NOT NULL,
+  `nome` varchar(100) NOT NULL,
+  `cpf` varchar(100) NOT NULL,
+  `email` varchar(50) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -35,7 +35,7 @@ CREATE TABLE `clients` (
 -- Dumping data for table `clients`
 --
 
-LOCK TABLES `clients` WRITE;
+LOCK TABLES `clientes` WRITE;
 /*!40000 ALTER TABLE `clients` DISABLE KEYS */;
 /*!40000 ALTER TABLE `clients` ENABLE KEYS */;
 UNLOCK TABLES;
