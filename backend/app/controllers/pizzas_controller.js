@@ -26,9 +26,9 @@ export const pizzaInsert = async (req, res) => {
     return
   }
 
-  const { nome, sabor, ingredientes } = req.body
+  const { nome, sabor, ingredientes, tipo } = req.body
 
-  if (!nome || !sabor || !ingredientes || !avatar) {
+  if (!nome || !sabor || !ingredientes || !tipo || !avatar) {
     res.status(400).json({
       id: 0,
       msg: "Error... params not found, please inform 'nome', 'category'."
@@ -41,6 +41,7 @@ export const pizzaInsert = async (req, res) => {
       nome,
       sabor,
       ingredientes,
+      tipo,
       avatar
     })
     res
@@ -54,10 +55,9 @@ export const pizzaInsert = async (req, res) => {
 export const pizzaUpdate = async (req, res) => {
   const { id } = req.params
 
-  // atribui via desestruturação
-  const { nome, sabor, ingredientes, avatar } = req.body
+  const { ingredientes, tipo } = req.body
 
-  if (!nome || !sabor || !ingredientes) {
+  if (!ingredientes || !tipo) {
     res.status(400).json({
       id: 0,
       msg: "Error... params not found, please inform 'nome', 'category'."
@@ -66,8 +66,8 @@ export const pizzaUpdate = async (req, res) => {
   }
 
   try {
-    await db('pizzas').where({ id }).update({ nome, category })
-    res.status(200).json({ id, msg: 'Ok, pizza successfully changed' })
+    await db('pizzas').where({ id }).update({ ingredientes, tipo })
+    res.status(200).json({ id, msg: 'Ok, cadastro de pizza atualizado!' })
   } catch (error) {
     res.status(400).json({ id: 0, msg: 'Error: ' + error.message })
   }
@@ -78,7 +78,9 @@ export const pizzaDestroy = async (req, res) => {
 
   try {
     await db('pizzas').where({ id }).del()
-    res.status(200).json({ id, msg: 'Ok, pizza successfully deleted' })
+    res
+      .status(200)
+      .json({ id, msg: 'Ok, cadastro de pizza deletado com sucesso!' })
   } catch (error) {
     res.status(400).json({ id: 0, msg: 'Error: ' + error.message })
   }
@@ -105,54 +107,4 @@ export const categorySearch = async (req, res) => {
   } catch (error) {
     res.status(400).json({ id: 0, msg: 'Error: ' + error.message })
   }
-}
-
-export const listaLista = async (req, res) => {
-  try {
-    // obtém da tabela de produtos todos os registros
-    const produtos = await dbKnex
-      .select('p.*', 'm.nome as marca')
-      .from('produtos as p')
-      .innerJoin('marcas as m', { 'p.marca_id': 'm.id' })
-
-    ejs.renderFile('views/listaProdutos.ejs', { produtos }, (err, html) => {
-      if (err) {
-        return res.status(400).send('Erro na geração da página')
-      }
-      res.status(200).send(html)
-    })
-  } catch (error) {
-    res.status(400).json({ id: 0, msg: 'Erro: ' + error.message })
-  }
-}
-
-export const produtoPdf = async (req, res) => {
-  //  const browser = await puppeteer.launch({headless: false});
-  const browser = await puppeteer.launch()
-  const page = await browser.newPage()
-
-  // carrega a página da rota anterior (com a listagem dos produtos)
-  await page.goto('http://localhost:3001/produtos/lista')
-
-  // aguarda a conclusão da exibição da página com os dados do banco
-  await page.waitForNetworkIdle(0)
-
-  // gera o pdf da página exibida
-  const pdf = await page.pdf({
-    printBackground: true,
-    format: 'A4',
-    margin: {
-      top: '20px',
-      right: '20px',
-      bottom: '20px',
-      left: '20px'
-    }
-  })
-
-  await browser.close()
-
-  // define o tipo de retorno deste método
-  res.contentType('application/pdf')
-
-  res.status(200).send(pdf)
 }

@@ -3,19 +3,32 @@ import bcrypt from 'bcrypt'
 
 const saltRounds = 10
 
-export const userIndex = async (req, res) => {
+export const garcomIndex = async (req, res) => {
   try {
-    const users = await db.select('*').from('usuarios')
-    res.send(users)
+    const garcons = await db.select('*').from('garcons')
+    res.send(garcons)
   } catch (error) {
     res.status(400).json({ id: 0, msg: 'Error, ' + error.message })
   }
 }
 
-export const userInsert = async (req, res) => {
-  const { nome, senha, email, funcao } = req.body
+export const garcomInsert = async (req, res) => {
+  const avatar = req.file.path
 
-  if (!nome || !senha || !email || !funcao) {
+  if (
+    (req.file.mimetype != 'image/jpeg' && req.file.mimetype != 'image/png') ||
+    req.file.size > 3840 * 2160
+  ) {
+    fs.unlinkSync(avatar)
+    res
+      .status(400)
+      .json({ msg: 'Formato invalido de imagem ou imagem muito grande' })
+    return
+  }
+
+  const { nome, email, senha } = req.body
+
+  if (!nome || !senha || !email || !avatar) {
     res
       .status(400)
       .json({ id: 0, msg: 'Erro, informe nome, senha e email, please!' })
@@ -56,11 +69,11 @@ export const userInsert = async (req, res) => {
   const hash = bcrypt.hashSync(senha, salt)
 
   try {
-    const novo = await db('usuarios').insert({
+    const novo = await db('garcons').insert({
       nome,
-      senha: hash,
       email,
-      funcao
+      senha: hash,
+      avatar
     })
 
     res.status(201).json({ id: novo[0], msg: 'Ok! Inserido com sucesso' })
@@ -69,11 +82,11 @@ export const userInsert = async (req, res) => {
   }
 }
 
-export const userDestroy = async (req, res) => {
+export const garcomDestroy = async (req, res) => {
   const { id } = req.params
 
   try {
-    await db('usuarios').where({ id }).del()
+    await db('garcons').where({ id }).del()
     res.status(200).json({ id, msg: 'Ok, usuario removido com sucesso!' })
   } catch (error) {
     res.status(400).json({ id: 0, msg: 'Erro' + error.message })

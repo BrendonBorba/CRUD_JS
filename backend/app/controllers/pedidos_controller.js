@@ -6,68 +6,82 @@ import puppeteer from 'puppeteer'
 export const pedidosIndex = async (req, res) => {
   try {
     const pedidos = await db
-      .select('p.id', 'c.nome as cliente', 'z.nome as pizza', 'p.quantidade')
+      .select(
+        'p.id',
+        'c.nome as cliente',
+        'z.nome as pizza',
+        'm.numero as mesa',
+        'p.quantidade'
+      )
       .from('pedidos as p')
       .innerJoin('pizzas as z', { 'p.pizza_id': 'z.id' })
       .innerJoin('clientes as c', { 'p.cliente_id': 'c.id' })
+      .innerJoin('mesas as m', { 'p.mesa_id': 'm.id' })
     res.send(pedidos)
   } catch (error) {
     res.status(400).json({ id: 0, msg: 'Error: ' + error.messsage })
   }
 }
 
-// export const pedidosInsert = async (req, res) => {
-//   const { cliente_id, pizza_id, quantidade } = req.body
+export const pedidosInsert = async (req, res) => {
+  const { cliente_id, pizza_id, mesa_id, quantidade } = req.body
 
-//   if (!cliente_id || !pizza_id || !quantidade) {
-//     res.status(400).json({
-//       id: 0,
-//       msg: "Error... params not found, please inform 'cliente_id', 'pizza_id' and 'quantidade'."
-//     })
-//     return
-//   }
+  if (!cliente_id || !pizza_id || !mesa_id || !quantidade) {
+    res.status(400).json({
+      id: 0,
+      msg: "Erro... informe os valores 'cliente_id', 'pizza_id', 'mesa_id, e 'quantidade'."
+    })
+    return
+  }
 
-//   try {
-//     const cliente = await db('pedidos').insert({ nome, cpf, email })
-//     res
-//       .status(201)
-//       .json({ id: cliente[0], msg: 'Ok, cliente successfully inserted!' })
-//   } catch (error) {
-//     res.status(400).json({ id: 0, msg: 'Error: ' + error.message })
-//   }
-// }
+  try {
+    const mesa = await db('pedidos').insert({
+      cliente_id,
+      pizza_id,
+      mesa_id,
+      quantidade
+    })
+    res
+      .status(201)
+      .json({ id: mesa[0], msg: 'Ok, pedido realizado com sucesso!' })
+  } catch (error) {
+    res.status(400).json({ id: 0, msg: 'Error: ' + error.message })
+  }
+}
 
-// export const clienteUpdate = async (req, res) => {
-//   const { id } = req.params
+export const pedidoUpdate = async (req, res) => {
+  const { id } = req.params
 
-//   const { nome, cpf, email } = req.body
+  const { cliente_id, pizza_id, mesa_id, quantidade } = req.body
 
-//   if (!nome || !cpf || !email) {
-//     res.status(400).json({
-//       id: 0,
-//       msg: "Error... params not found, please inform 'nome', 'cpf' and 'email'"
-//     })
-//     return
-//   }
+  if (!cliente_id || !pizza_id || !mesa_id || !quantidade) {
+    res.status(400).json({
+      id: 0,
+      msg: "Error... params not found, please inform 'nome', 'cpf' and 'email'"
+    })
+    return
+  }
 
-//   try {
-//     await db('clientes').where({ id }).update({ nome, cpf, email })
-//     res.status(200).json({ id, msg: 'Ok, cliente successfully changed' })
-//   } catch (error) {
-//     res.status(400).json({ id: 0, msg: 'Error: ' + error.message })
-//   }
-// }
+  try {
+    await db('pedidos')
+      .where({ id })
+      .update({ cliente_id, pizza_id, mesa_id, quantidade })
+    res.status(200).json({ id, msg: 'Ok, pedido atualizado com sucesso!' })
+  } catch (error) {
+    res.status(400).json({ id: 0, msg: 'Error: ' + error.message })
+  }
+}
 
-// export const clienteDestroy = async (req, res) => {
-//   const { id } = req.params
+export const pedidoDestroy = async (req, res) => {
+  const { id } = req.params
 
-//   try {
-//     await db('clientes').where({ id }).del()
-//     res.status(200).json({ id, msg: 'Ok, cliente successfully deleted' })
-//   } catch (error) {
-//     res.status(400).json({ id: 0, msg: 'Error: ' + error.message })
-//   }
-// }
+  try {
+    await db('pedidos').where({ id }).del()
+    res.status(200).json({ id, msg: 'Ok, pedido deletado com sucessos' })
+  } catch (error) {
+    res.status(400).json({ id: 0, msg: 'Error: ' + error.message })
+  }
+}
 
 export const listaPedidos = async (req, res) => {
   try {

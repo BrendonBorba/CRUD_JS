@@ -5,8 +5,7 @@ import {
   clienteInsert,
   clienteUpdate,
   clienteDestroy,
-  clienteSearch,
-  emailSearch
+  clienteSearch
 } from '../controllers/clientes_controller.js'
 import {
   pizzasIndex,
@@ -17,15 +16,29 @@ import {
   categorySearch
 } from '../controllers/pizzas_controller.js'
 import {
-  userIndex,
-  userInsert,
-  userDestroy
-} from '../controllers/usuarios_controller.js'
+  garcomIndex,
+  garcomInsert,
+  garcomDestroy
+} from '../controllers/garcons_controller.js'
 import {
   listaPedidos,
+  pedidoDestroy,
   pedidosIndex,
-  pedidosPdf
+  pedidosInsert,
+  pedidosPdf,
+  pedidoUpdate
 } from '../controllers/pedidos_controller.js'
+import {
+  mesaDestroy,
+  mesaInsert,
+  mesasIndex,
+  mesaUpdate
+} from '../controllers/mesas_controller.js'
+import {
+  votoIndex,
+  votoInsert,
+  votoConfirmar
+} from '../controllers/votos_controller.js'
 import { Login, adminInsert } from '../controllers/login_controller.js'
 import { upload } from '../controllers/middlewares/foto_store.js'
 import { VerificaLogin } from '../controllers/middlewares/verifica_login.js'
@@ -41,7 +54,6 @@ router
   .put('/cliente/:id', clienteUpdate)
   .delete('/cliente/:id', clienteDestroy)
   .get('/clientes/search/:nome', clienteSearch)
-  .get('/clientes/search/:from/:to', emailSearch)
 
   .get('/pizzas', pizzasIndex)
   .post('/pizza', upload.single('avatar'), pizzaInsert)
@@ -50,15 +62,27 @@ router
   .get('/pizzas/search/:name', pizzaSearch)
   .get('/pizzas/search/:category', categorySearch)
 
-  .get('/usuarios', userIndex)
-  .post('/usuario', userInsert)
-  .delete('/usuario/:id', userDestroy)
+  .get('/garcons', garcomIndex)
+  .post('/garcom', upload.single('avatar'), garcomInsert)
+  .delete('/garcom/:id', garcomDestroy)
 
   .get('/login', Login)
   .post('/sign_in', adminInsert)
 
   .get('/pedidos', pedidosIndex)
+  .post('/pedido', pedidosInsert)
+  .put('/pedido/:id', pedidoUpdate)
+  .delete('/pedido/:id', pedidoDestroy)
   .get('/pedidos/lista', listaPedidos)
   .get('/pedidos/pdf', pedidosPdf)
+
+  .get('/mesas', mesasIndex)
+  .post('/mesa', mesaInsert)
+  .put('/mesa/:id', mesaUpdate)
+  .delete('/mesa/:id', mesaDestroy)
+
+  .get('/votos_garcons', votoIndex)
+  .post('/votar_garcom', votoInsert)
+  .get('/votos/confirma/:hash', votoConfirmar)
 
 export default router
