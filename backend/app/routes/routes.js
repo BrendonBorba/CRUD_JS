@@ -20,8 +20,15 @@ import {
   userIndex,
   userInsert,
   userDestroy
-} from '../controllers/users_controller.js'
+} from '../controllers/usuarios_controller.js'
+import {
+  listaPedidos,
+  pedidosIndex,
+  pedidosPdf
+} from '../controllers/pedidos_controller.js'
+import { Login, adminInsert } from '../controllers/login_controller.js'
 import { upload } from '../controllers/middlewares/foto_store.js'
+import { VerificaLogin } from '../controllers/middlewares/verifica_login.js'
 
 const router = Router()
 
@@ -46,5 +53,12 @@ router
   .get('/usuarios', userIndex)
   .post('/usuario', userInsert)
   .delete('/usuario/:id', userDestroy)
+
+  .get('/login', Login)
+  .post('/sign_in', adminInsert)
+
+  .get('/pedidos', pedidosIndex)
+  .get('/pedidos/lista', listaPedidos)
+  .get('/pedidos/pdf', pedidosPdf)
 
 export default router

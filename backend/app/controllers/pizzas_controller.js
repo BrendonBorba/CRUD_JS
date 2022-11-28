@@ -1,5 +1,7 @@
 import db from '../../config/db_config.js'
 import fs from 'fs'
+import puppeteer from 'puppeteer'
+import ejs from 'ejs'
 
 export const pizzasIndex = async (req, res) => {
   try {
@@ -15,7 +17,7 @@ export const pizzaInsert = async (req, res) => {
 
   if (
     (req.file.mimetype != 'image/jpeg' && req.file.mimetype != 'image/png') ||
-    req.file.size > 2048 * 2048
+    req.file.size > 1920 * 1080
   ) {
     fs.unlinkSync(avatar)
     res
@@ -105,11 +107,52 @@ export const categorySearch = async (req, res) => {
   }
 }
 
-export default {
-  pizzasIndex,
-  pizzaInsert,
-  pizzaUpdate,
-  pizzaDestroy,
-  pizzaSearch,
-  categorySearch
+export const listaLista = async (req, res) => {
+  try {
+    // obtém da tabela de produtos todos os registros
+    const produtos = await dbKnex
+      .select('p.*', 'm.nome as marca')
+      .from('produtos as p')
+      .innerJoin('marcas as m', { 'p.marca_id': 'm.id' })
+
+    ejs.renderFile('views/listaProdutos.ejs', { produtos }, (err, html) => {
+      if (err) {
+        return res.status(400).send('Erro na geração da página')
+      }
+      res.status(200).send(html)
+    })
+  } catch (error) {
+    res.status(400).json({ id: 0, msg: 'Erro: ' + error.message })
+  }
+}
+
+export const produtoPdf = async (req, res) => {
+  //  const browser = await puppeteer.launch({headless: false});
+  const browser = await puppeteer.launch()
+  const page = await browser.newPage()
+
+  // carrega a página da rota anterior (com a listagem dos produtos)
+  await page.goto('http://localhost:3001/produtos/lista')
+
+  // aguarda a conclusão da exibição da página com os dados do banco
+  await page.waitForNetworkIdle(0)
+
+  // gera o pdf da página exibida
+  const pdf = await page.pdf({
+    printBackground: true,
+    format: 'A4',
+    margin: {
+      top: '20px',
+      right: '20px',
+      bottom: '20px',
+      left: '20px'
+    }
+  })
+
+  await browser.close()
+
+  // define o tipo de retorno deste método
+  res.contentType('application/pdf')
+
+  res.status(200).send(pdf)
 }

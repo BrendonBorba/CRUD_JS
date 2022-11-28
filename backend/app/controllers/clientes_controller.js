@@ -85,12 +85,3 @@ export const emailSearch = async (req, res) => {
     res.status(400).json({ id: 0, msg: 'Error: ' + error.message })
   }
 }
-
-export default {
-  clientesIndex,
-  clienteInsert,
-  clienteUpdate,
-  clienteDestroy,
-  clienteSearch,
-  emailSearch
-}

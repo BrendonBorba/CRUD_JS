@@ -13,9 +13,9 @@ export const userIndex = async (req, res) => {
 }
 
 export const userInsert = async (req, res) => {
-  const { nome, senha, email } = req.body
+  const { nome, senha, email, funcao } = req.body
 
-  if (!nome || !senha || !email) {
+  if (!nome || !senha || !email || !funcao) {
     res
       .status(400)
       .json({ id: 0, msg: 'Erro, informe nome, senha e email, please!' })
@@ -56,7 +56,12 @@ export const userInsert = async (req, res) => {
   const hash = bcrypt.hashSync(senha, salt)
 
   try {
-    const novo = await db('usuarios').insert({ nome, senha: hash, email })
+    const novo = await db('usuarios').insert({
+      nome,
+      senha: hash,
+      email,
+      funcao
+    })
 
     res.status(201).json({ id: novo[0], msg: 'Ok! Inserido com sucesso' })
   } catch (error) {
