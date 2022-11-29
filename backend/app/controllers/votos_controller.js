@@ -5,9 +5,14 @@ import nodemailer from 'nodemailer'
 export const votoIndex = async (req, res) => {
   try {
     const avaliacao = await db
-      .select('v.*', 'g.nome as garçom')
+      .select(
+        'c.nome as Voto do Cliente',
+        'g.nome as Garçom Votado',
+        'v.data_registro as Data do Voto'
+      )
       .from('votos as v')
       .innerJoin('garcons as g', { 'v.garcom_id': 'g.id' })
+      .innerJoin('clientes as c', { 'v.cliente_id': 'c.id' })
     res.status(200).json(avaliacao)
   } catch (error) {
     res.status(400).json({ id: 0, msg: 'Erro: ' + error.message })
@@ -104,18 +109,15 @@ export const votoConfirmar = async (req, res) => {
 
   // define (inicia) uma nova transação
   const trx = await db.transaction()
-  console.log(voto[0])
 
   try {
     // 1ª operação da transação: alterar o status do voto
     // para confirmado
-    const novo = await trx('votos')
-      .where({ hash_conf: hash })
-      .update({ confirmado: 1 })
+    await trx('votos').where({ hash_conf: hash }).update({ confirmado: 1 })
 
     // 2ª operação da transação: aumentar o número de votos
     // candidata
-    await trx('garcons')
+    const novo = await trx('garcons')
       .where({ id: voto[0].garcom_id })
       .increment({ votos: 1 })
 
@@ -124,6 +126,7 @@ export const votoConfirmar = async (req, res) => {
 
     // mensagem de confirmação
     res.status(201).send('Obrigado! Voto confirmado com sucesso.')
+    console.log(novo)
   } catch (error) {
     // rollback (volta) desfaz a operação realizada
     await trx.rollback()
