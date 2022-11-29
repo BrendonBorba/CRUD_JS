@@ -92,3 +92,16 @@ export const garcomDestroy = async (req, res) => {
     res.status(400).json({ id: 0, msg: 'Erro' + error.message })
   }
 }
+
+export const garcomMaisVotada = async (req, res) => {
+  try {
+    // consulta com ordenação e limite de registros retornados
+    const consulta = await db('garcons')
+      .select('nome', 'votos')
+      .orderBy('votos', 'desc')
+      .limit(5)
+    res.status(200).json(consulta)
+  } catch (error) {
+    res.status(400).json({ id: 0, msg: 'Erro: ' + error.message })
+  }
+}

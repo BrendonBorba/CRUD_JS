@@ -7,6 +7,15 @@ dotenv.config()
 
 const saltRounds = 10
 
+export const adminIndex = async (req, res) => {
+  try {
+    const admin = await db.select('a.nome', 'a.email').from('admins as a')
+    res.send(admin)
+  } catch (error) {
+    res.status(400).json({ id: 0, msg: 'Error: ' + error.messsage })
+  }
+}
+
 export const Login = async (req, res) => {
   const { email, senha } = req.body
 

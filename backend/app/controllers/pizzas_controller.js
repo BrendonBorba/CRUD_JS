@@ -86,25 +86,66 @@ export const pizzaDestroy = async (req, res) => {
   }
 }
 
-export const pizzaSearch = async (req, res) => {
+export const nomePizza = async (req, res) => {
   const { nome } = req.params
 
   try {
-    const search = await db('pizzas').whereLike('nome', `%${nome}%`)
+    const search = await db
+      .select(
+        'p.nome as Pizza',
+        'p.sabor as Sabor',
+        'p.ingredientes as Ingredientes',
+        'p.tipo as Tipo'
+      )
+      .from('pizzas as p')
+      .whereLike('nome', `%${nome}%`)
     res.status(200).json(search)
   } catch (error) {
     res.status(400).json({ id: 0, msg: 'Error: ' + error.message })
   }
 }
 
-export const categorySearch = async (req, res) => {
-  const { category } = req.params
+export const saborPizza = async (req, res) => {
+  const { sabor } = req.params
 
   try {
-    const search = await db('pizzas').whereLike('category', `%${category}%`)
+    const search = await db
+      .select(
+        'p.nome as Pizza',
+        'p.sabor as Sabor',
+        'p.ingredientes as Ingredientes',
+        'p.tipo as Tipo'
+      )
+      .from('pizzas as p')
+      .whereLike('sabor', `%${sabor}%`)
     res.status(200).json(search)
-    console.log('chegou aqui')
   } catch (error) {
     res.status(400).json({ id: 0, msg: 'Error: ' + error.message })
+  }
+}
+
+export const tipoPizza = async (req, res) => {
+  try {
+    // consulta com agrupamento
+    const consulta = await db('pizzas')
+      .select('tipo')
+      .count({ quantidade: '*' })
+      .groupBy('tipo')
+    res.status(200).json(consulta)
+  } catch (error) {
+    res.status(400).json({ id: 0, msg: 'Erro: ' + error.message })
+  }
+}
+
+export const quantiSabor = async (req, res) => {
+  try {
+    // consulta com agrupamento
+    const consulta = await db('pizzas')
+      .select('sabor')
+      .count({ quantidade: '*' })
+      .groupBy('sabor')
+    res.status(200).json(consulta)
+  } catch (error) {
+    res.status(400).json({ id: 0, msg: 'Erro: ' + error.message })
   }
 }

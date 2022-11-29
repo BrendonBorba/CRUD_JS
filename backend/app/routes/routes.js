@@ -12,13 +12,16 @@ import {
   pizzaInsert,
   pizzaUpdate,
   pizzaDestroy,
-  pizzaSearch,
-  categorySearch
+  nomePizza,
+  saborPizza,
+  tipoPizza,
+  quantiSabor
 } from '../controllers/pizzas_controller.js'
 import {
   garcomIndex,
   garcomInsert,
-  garcomDestroy
+  garcomDestroy,
+  garcomMaisVotada
 } from '../controllers/garcons_controller.js'
 import {
   listaPedidos,
@@ -39,7 +42,12 @@ import {
   votoInsert,
   votoConfirmar
 } from '../controllers/votos_controller.js'
-import { Login, adminInsert } from '../controllers/login_controller.js'
+import { avaliacaoIndex } from '../controllers/avaliacao_pizza_controller.js'
+import {
+  Login,
+  adminInsert,
+  adminIndex
+} from '../controllers/login_controller.js'
 import { upload } from '../controllers/middlewares/foto_store.js'
 import { VerificaLogin } from '../controllers/middlewares/verifica_login.js'
 
@@ -59,14 +67,18 @@ router
   .post('/pizza', upload.single('avatar'), pizzaInsert)
   .put('/pizza/:id', pizzaUpdate)
   .delete('/pizza/:id', pizzaDestroy)
-  .get('/pizzas/search/:name', pizzaSearch)
-  .get('/pizzas/search/:category', categorySearch)
+  .get('/pizzas/pesquisa/nome/:nome', nomePizza)
+  .get('/pizzas/pesquisa/sabor/:sabor', saborPizza)
+  .get('/pizzas/pesquisa/tipo', tipoPizza)
+  .get('/pizzas/pesquisa/sabores', quantiSabor)
 
   .get('/garcons', garcomIndex)
   .post('/garcom', upload.single('avatar'), garcomInsert)
   .delete('/garcom/:id', garcomDestroy)
+  .get('/garcom/votacao', garcomMaisVotada)
 
   .get('/login', Login)
+  .get('/admins', adminIndex)
   .post('/sign_in', adminInsert)
 
   .get('/pedidos', pedidosIndex)
@@ -84,5 +96,7 @@ router
   .get('/votos_garcons', votoIndex)
   .post('/votar_garcom', votoInsert)
   .get('/votos/confirma/:hash', votoConfirmar)
+
+  .get('/avaliacao_pizzas', avaliacaoIndex)
 
 export default router
