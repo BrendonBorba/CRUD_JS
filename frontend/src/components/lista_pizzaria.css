@@ -1,0 +1,16 @@
+.img-cand {
+  width: 1322px;
+}
+
+table > tbody > tr > td > h4 > i {
+  cursor: pointer;
+}
+
+table > tbody > tr > td > img {
+  height: auto;
+  width: 250px;
+}
+
+#title {
+  margin-top: 30px;
+}

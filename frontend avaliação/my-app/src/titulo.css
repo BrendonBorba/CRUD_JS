@@ -1,0 +1,13 @@
+.container {
+  background-color: rgb(158, 203, 60);
+}
+
+.container img {
+  padding: 15px;
+  background-color: #fff;
+}
+
+.avaliafoto {
+  width: 339px;
+  height: 339px;
+}
