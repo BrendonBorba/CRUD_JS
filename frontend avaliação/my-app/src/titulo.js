@@ -1,4 +1,4 @@
-import './Titulo.css'
+import './titulo.css'
 
 function Titulo() {
   return (

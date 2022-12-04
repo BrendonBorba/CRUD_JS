@@ -66,7 +66,7 @@ router
   .get('/pizzas', pizzasIndex)
   .post('/pizza', upload.single('avatar'), pizzaInsert)
   .put('/pizza/:id', pizzaUpdate)
-  .delete('/pizza/:id', pizzaDestroy)
+  .delete('/pizza/:id', VerificaLogin, pizzaDestroy)
   .get('/pizzas/pesquisa/nome/:nome', nomePizza)
   .get('/pizzas/pesquisa/sabor/:sabor', saborPizza)
   .get('/pizzas/pesquisa/tipo', tipoPizza)

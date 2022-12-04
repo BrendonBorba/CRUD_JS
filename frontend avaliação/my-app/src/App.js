@@ -1,6 +1,6 @@
 import { Fragment } from 'react'
-import Listagem from './Listagem'
-import Titulo from './Titulo'
+import Listagem from './listagem'
+import Titulo from './titulo'
 
 function App() {
   return (
