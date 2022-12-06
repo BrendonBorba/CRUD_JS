@@ -1,9 +1,9 @@
 import { useState } from 'react'
-import { inAxios } from '../config_axios'
+import { inAxios } from '../config_axios.js'
 
 import './inclusao_pizzaria.css'
 
-export const inclusao_pizzaria = () => {
+const Inclusao_pizzaria = () => {
   const [nome, setNome] = useState('')
   const [sabor, setSabor] = useState('')
   const [ingredientes, setIngredientes] = useState('')
@@ -130,3 +130,5 @@ export const inclusao_pizzaria = () => {
     </form>
   )
 }
+
+export default Inclusao_pizzaria

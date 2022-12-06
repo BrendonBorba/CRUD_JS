@@ -1,20 +1,22 @@
-import { inAxios, webServiceURL } from '../config_axios'
+import { inAxios, webServiceURL } from '../config_axios.js'
 import { useState, useEffect } from 'react'
 
 import './lista_pizzaria.css'
 
-export const lista_pizzaria = () => {
+const Lista_pizzaria = () => {
   const [pizzas, setPizzas] = useState([])
 
   const obterpizzaria = async () => {
-    const lista = await inAxios.get('pizzas')
+    const Lista = await inAxios.get('pizzas')
 
-    setPizzas(lista.data)
+    setPizzas(Lista.data)
   }
 
   useEffect(() => {
-    lista_pizzaria()
+    obterpizzaria()
   }, [])
+  console.log(webServiceURL + pizzas[0]?.avatar)
+  const path = 'http://127.0.0.1:5000/'
 
   const excluir = async (id, nome) => {
     if (!window.confirm(`Confirma a exclusão da pizza"${nome}"?`)) {
@@ -42,7 +44,7 @@ export const lista_pizzaria = () => {
       })
       const pAlteracao = [...pizzas]
       pAlteracao[index].nome = novoNome
-      setpizzas(pAlteracao)
+      setPizzas(pAlteracao)
     } catch (error) {
       alert(`Erro... Não foi possível alterar o nome: ${error}`)
     }
@@ -64,12 +66,12 @@ export const lista_pizzaria = () => {
         </thead>
         <tbody>
           {pizzas.map((pizz, index) => (
-            <tr>
+            <tr key={pizz.id}>
               <td>
                 <img
-                  src={webServiceURL + pizz.avatar}
+                  src={path + pizz.avatar}
                   alt={pizz.nome}
-                  className="img-pizz"
+                  className="w-100 img-fluid"
                 />
               </td>
               <td>{pizz.nome}</td>
@@ -79,13 +81,13 @@ export const lista_pizzaria = () => {
               <td className="text-center">
                 <h4>
                   <i
-                    class="bi bi-pencil-square text-success"
+                    className="bi bi-pencil-square text-success"
                     onClick={() =>
                       alterar(
                         pizz.id,
                         pizz.nome,
                         pizz.sabor,
-                        pizz.ingrediente,
+                        pizz.ingredientes,
                         pizz.tipo,
                         index
                       )
@@ -105,3 +107,5 @@ export const lista_pizzaria = () => {
     </div>
   )
 }
+
+export default Lista_pizzaria

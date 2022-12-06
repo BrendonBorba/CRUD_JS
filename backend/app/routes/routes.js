@@ -1,11 +1,13 @@
 import { Router, json } from 'express'
+import path from 'path'
 import cors from 'cors'
 import {
   clientesIndex,
   clienteInsert,
   clienteUpdate,
   clienteDestroy,
-  clienteSearch
+  clienteSearch,
+  totalClientes
 } from '../controllers/clientes_controller.js'
 import {
   pizzasIndex,
@@ -15,21 +17,27 @@ import {
   nomePizza,
   saborPizza,
   tipoPizza,
-  quantiSabor
+  quantiSabor,
+  numSabor,
+  totalPizzas,
+  pizzaSbaor
 } from '../controllers/pizzas_controller.js'
 import {
   garcomIndex,
   garcomInsert,
   garcomDestroy,
-  garcomMaisVotada
+  garcomMaisVotada,
+  totalGarcons
 } from '../controllers/garcons_controller.js'
 import {
   listaPedidos,
   pedidoDestroy,
+  pedidosDia,
   pedidosIndex,
   pedidosInsert,
   pedidosPdf,
-  pedidoUpdate
+  pedidoUpdate,
+  totalPedidos
 } from '../controllers/pedidos_controller.js'
 import {
   mesaDestroy,
@@ -62,20 +70,25 @@ router
   .put('/cliente/:id', clienteUpdate)
   .delete('/cliente/:id', clienteDestroy)
   .get('/clientes/search/:nome', clienteSearch)
+  .get('/clientes/pesquisa/dadosgerais', totalClientes)
 
   .get('/pizzas', pizzasIndex)
   .post('/pizza', upload.single('avatar'), pizzaInsert)
   .put('/pizza/:id', pizzaUpdate)
-  .delete('/pizza/:id', VerificaLogin, pizzaDestroy)
+  .delete('/pizza/:id', pizzaDestroy)
   .get('/pizzas/pesquisa/nome/:nome', nomePizza)
   .get('/pizzas/pesquisa/sabor/:sabor', saborPizza)
   .get('/pizzas/pesquisa/tipo', tipoPizza)
   .get('/pizzas/pesquisa/sabores', quantiSabor)
+  .get('/pizzas/pesquisa/numsabor', numSabor)
+  .get('/pizzas/pesquisa/dadosgerais', totalPizzas)
+  .get('/pizzas/sabor', pizzaSbaor)
 
   .get('/garcons', garcomIndex)
   .post('/garcom', upload.single('avatar'), garcomInsert)
   .delete('/garcom/:id', garcomDestroy)
   .get('/garcom/votacao', garcomMaisVotada)
+  .get('/garcom/pesquisa/dadosgerais', totalGarcons)
 
   .get('/login', Login)
   .get('/admins', adminIndex)
@@ -87,6 +100,8 @@ router
   .delete('/pedido/:id', pedidoDestroy)
   .get('/pedidos/lista', listaPedidos)
   .get('/pedidos/pdf', pedidosPdf)
+  .get('/pedidos/pesquisa/dadosgerais', totalPedidos)
+  .get('/pedidos/pesquisa/dia', pedidosDia)
 
   .get('/mesas', mesasIndex)
   .post('/mesa', mesaInsert)

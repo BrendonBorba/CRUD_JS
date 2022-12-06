@@ -1,18 +1,18 @@
-import header_pizzaria from './components/header_pizzaria.js'
-import lista_pizzaria from './components/ListaEletronicos.js'
-import inclusao_pizzaria from './components/InclusaoEletronicos.js'
-import gerencia_pizzaria from './components/GerenciaEletronica.js'
+import HEADER_PIZZARIA from './components/Header_pizzaria.js'
+import LISTA_PIZZARIA from './components/Lista_pizzaria.js'
+import INCLUSAO_PIZZARIA from './components/Inclusao_pizzaria.js'
+import { GERENCIA_PIZZARIA } from './components/Gerencia_pizzaria.js'
 
 import { Routes, Route } from 'react-router-dom'
 
-const App = () => {
+function App() {
   return (
     <>
-      <MenuSuperior />
+      <HEADER_PIZZARIA />
       <Routes>
-        <Route path="/" element={<lista_pizzaria />} />
-        <Route path="inclusao" element={<inclusao_pizzaria />} />
-        <Route path="gerencia" element={<gerencia_pizzaria />} />
+        <Route path="/" element={<LISTA_PIZZARIA />} />
+        <Route path="inclusao" element={<INCLUSAO_PIZZARIA />} />
+        <Route path="gerencia" element={<GERENCIA_PIZZARIA />} />
       </Routes>
     </>
   )

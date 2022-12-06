@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom'
 
 import './header_pizzaria.css'
 
-export const header_pizzaria = () => {
+const Header_pizzaria = () => {
   return (
     <nav className="navbar navbar-expand-sm navbar-dark sticky-top">
       <div className="container">
@@ -30,3 +30,5 @@ export const header_pizzaria = () => {
     </nav>
   )
 }
+
+export default Header_pizzaria

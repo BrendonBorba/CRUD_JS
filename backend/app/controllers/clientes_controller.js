@@ -85,3 +85,15 @@ export const emailSearch = async (req, res) => {
     res.status(400).json({ id: 0, msg: 'Error: ' + error.message })
   }
 }
+
+export const totalClientes = async (req, res) => {
+  try {
+    const consulta = await db('clientes').count({ num: '*' })
+
+    const { num } = consulta[0]
+
+    res.status(200).json({ num })
+  } catch (error) {
+    res.status(400).json({ id: 0, msg: 'Error: ' + error.message })
+  }
+}

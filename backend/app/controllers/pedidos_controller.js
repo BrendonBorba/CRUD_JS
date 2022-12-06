@@ -131,3 +131,28 @@ export const pedidosPdf = async (req, res) => {
 
   res.status(200).send(pdf)
 }
+
+export const totalPedidos = async (req, res) => {
+  try {
+    const consulta = await db('pedidos').count({ num: '*' })
+
+    const { num } = consulta[0]
+
+    res.status(200).json({ num })
+  } catch (error) {
+    res.status(400).json({ id: 0, msg: 'Error: ' + error.message })
+  }
+}
+
+export const pedidosDia = async (req, res) => {
+  try {
+    const consulta = await db('pedidos')
+      .select(db.raw("strftime('%d/%m/%Y',data_registro) as dia"))
+      .count({ num: '*' })
+      .groupBy(db.raw("strftime('%d/%m/%Y',data_registro)"))
+
+    res.status(200).json(consulta)
+  } catch (error) {
+    res.status(400).json({ id: 0, msg: 'Erro: ' + error.message })
+  }
+}

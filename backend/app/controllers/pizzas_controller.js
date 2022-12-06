@@ -2,6 +2,7 @@ import db from '../../config/db_config.js'
 import fs from 'fs'
 import puppeteer from 'puppeteer'
 import ejs from 'ejs'
+import { async } from 'regenerator-runtime'
 
 export const pizzasIndex = async (req, res) => {
   try {
@@ -13,13 +14,14 @@ export const pizzasIndex = async (req, res) => {
 }
 
 export const pizzaInsert = async (req, res) => {
-  const avatar = req.file.path
+  const avata = req.file.path
+  let avatar = avata.replace('/home/brendon/Projetos_Faculdade/', '')
 
   if (
     (req.file.mimetype != 'image/jpeg' && req.file.mimetype != 'image/png') ||
     req.file.size > 1920 * 1080
   ) {
-    fs.unlinkSync(avatar)
+    fs.unlinkSync(avata)
     res
       .status(400)
       .json({ msg: 'FOrmato invalido de imagem ou imagem muito grande' })
@@ -28,7 +30,7 @@ export const pizzaInsert = async (req, res) => {
 
   const { nome, sabor, ingredientes, tipo } = req.body
 
-  if (!nome || !sabor || !ingredientes || !tipo || !avatar) {
+  if (!nome || !sabor || !ingredientes || !tipo || !avata) {
     res.status(400).json({
       id: 0,
       msg: "Error... params not found, please inform 'nome', 'category'."
@@ -55,9 +57,9 @@ export const pizzaInsert = async (req, res) => {
 export const pizzaUpdate = async (req, res) => {
   const { id } = req.params
 
-  const { ingredientes, tipo } = req.body
+  const { nome, ingredientes, tipo } = req.body
 
-  if (!ingredientes || !tipo) {
+  if (!nome || !ingredientes || !tipo) {
     res.status(400).json({
       id: 0,
       msg: "Error... params not found, please inform 'nome', 'category'."
@@ -66,7 +68,7 @@ export const pizzaUpdate = async (req, res) => {
   }
 
   try {
-    await db('pizzas').where({ id }).update({ ingredientes, tipo })
+    await db('pizzas').where({ id }).update({ nome, ingredientes, tipo })
     res.status(200).json({ id, msg: 'Ok, cadastro de pizza atualizado!' })
   } catch (error) {
     res.status(400).json({ id: 0, msg: 'Error: ' + error.message })
@@ -105,6 +107,18 @@ export const nomePizza = async (req, res) => {
   }
 }
 
+export const totalPizzas = async (req, res) => {
+  try {
+    const consulta = await db('pizzas').count({ num: '*' })
+
+    const { num } = consulta[0]
+
+    res.status(200).json({ num })
+  } catch (error) {
+    res.status(400).json({ id: 0, msg: 'Error: ' + error.message })
+  }
+}
+
 export const saborPizza = async (req, res) => {
   const { sabor } = req.params
 
@@ -129,7 +143,7 @@ export const tipoPizza = async (req, res) => {
     // consulta com agrupamento
     const consulta = await db('pizzas')
       .select('tipo')
-      .count({ quantidade: '*' })
+      .count({ num: '*' })
       .groupBy('tipo')
     res.status(200).json(consulta)
   } catch (error) {
@@ -144,6 +158,31 @@ export const quantiSabor = async (req, res) => {
       .select('sabor')
       .count({ quantidade: '*' })
       .groupBy('sabor')
+    res.status(200).json(consulta)
+  } catch (error) {
+    res.status(400).json({ id: 0, msg: 'Erro: ' + error.message })
+  }
+}
+
+export const numSabor = async (req, res) => {
+  try {
+    // consulta com agrupamento
+    const consulta = await db('pizzas')
+      .count({ num: '*' })
+      .avg({ media: 'tipo' })
+      .groupBy('tipo')
+    res.status(200).json(consulta)
+  } catch (error) {
+    res.status(400).json({ id: 0, msg: 'Erro: ' + error.message })
+  }
+}
+
+export const pizzaSbaor = async (req, res) => {
+  try {
+    const consulta = await db('pizzas')
+      .select('nome', 'sabor')
+      .orderBy('sabor', 'desc')
+
     res.status(200).json(consulta)
   } catch (error) {
     res.status(400).json({ id: 0, msg: 'Erro: ' + error.message })
